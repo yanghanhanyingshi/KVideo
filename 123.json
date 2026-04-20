@@ -1,0 +1,35 @@
+[
+    {
+        "id": "feifan",
+        "name": "789",
+        "baseUrl": "https://api.wsyzy.net/api.php/provide/vod/?ac=list",
+        "group": "normal",
+        "enabled": true,
+        "priority": 1
+    },
+	{
+        "id": "feifan",
+        "name": "123",
+        "baseUrl": "https://api.wsyzy.net/api.php/provide/vod",
+        "group": "normal",
+        "enabled": true,
+        "priority": 2
+    },
+    
+    {
+        "id": "xiaoji",
+        "name": "666资源",
+        "baseUrl": "https://json.xingba222.com/api.php/provide/vod",
+        "group": "premium",
+        "enabled": true,
+        "priority": 3
+    },
+    {
+        "id": "xibao",
+        "name": "888采集",
+        "baseUrl": "https://xingba222.com/api.php/provide/vod/at/xml",
+        "group": "premium",
+        "enabled": true,
+        "priority": 4
+    }
+]
