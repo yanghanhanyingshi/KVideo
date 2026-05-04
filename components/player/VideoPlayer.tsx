@@ -175,23 +175,49 @@ export function VideoPlayer({
     ? `/api/proxy?url=${encodeURIComponent(playUrl)}&retry=${retryCount}` // Add retry param to force fresh request
     : playUrl;
 
+  // --- 下载按钮点击逻辑 ---
+  const handleDownload = () => {
+    const downloadUrl = effectiveUseProxy ? finalPlayUrl : playUrl;
+    const fileName = `${title || 'video'}_ep${currentEpisode + 1}.m3u8`;
+
+    const a = document.createElement('a');
+    a.href = downloadUrl;
+    a.download = fileName;
+    a.target = '_blank';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
   if (!playUrl) {
     return <VideoPlayerEmpty />;
   }
 
   return (
     <div data-no-spatial className="relative">
-      {/* Mode Indicator Badge - controlled by settings */}
-      {showModeIndicator && (
-        <div className="absolute top-3 right-3 z-30">
+      {/* 模式指示器 + 下载按钮区域 */}
+      <div className="absolute top-3 right-3 z-30 flex gap-2">
+        {/* Mode Indicator Badge - controlled by settings */}
+        {showModeIndicator && (
           <span className={`px-2 py-1 text-xs font-medium rounded-full backdrop-blur-md transition-all duration-300 ${effectiveUseProxy
             ? 'bg-orange-500/80 text-white'
             : 'bg-green-500/80 text-white'
             }`}>
             {effectiveUseProxy ? '代理模式' : '直连模式'}
           </span>
-        </div>
-      )}
+        )}
+
+        {/* 下载按钮（由环境变量控制） */}
+        {process.env.NEXT_PUBLIC_ENABLE_DOWNLOAD === 'true' && (
+          <button
+            onClick={handleDownload}
+            className="px-2 py-1 text-xs font-medium rounded-full bg-blue-500/80 text-white backdrop-blur-md hover:bg-blue-600/80 transition-all duration-300"
+          >
+            下载
+          </button>
+        )}
+      </div>
+
       {videoError ? (
         <VideoPlayerError
           error={videoError}
