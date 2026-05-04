@@ -175,14 +175,11 @@ export function VideoPlayer({
     ? `/api/proxy?url=${encodeURIComponent(playUrl)}&retry=${retryCount}` // Add retry param to force fresh request
     : playUrl;
 
-  // --- 下载按钮点击逻辑 ---
+  // 下载点击事件
   const handleDownload = () => {
-    const downloadUrl = effectiveUseProxy ? finalPlayUrl : playUrl;
-    const fileName = `${title || 'video'}_ep${currentEpisode + 1}.m3u8`;
-
     const a = document.createElement('a');
-    a.href = downloadUrl;
-    a.download = fileName;
+    a.href = finalPlayUrl;
+    a.download = `${title}_第${currentEpisode + 1}集.m3u8`;
     a.target = '_blank';
     document.body.appendChild(a);
     a.click();
@@ -195,9 +192,8 @@ export function VideoPlayer({
 
   return (
     <div data-no-spatial className="relative">
-      {/* 模式指示器 + 下载按钮区域 */}
+      {/* 右上角容器：模式标识 + 下载按钮并排 */}
       <div className="absolute top-3 right-3 z-30 flex gap-2">
-        {/* Mode Indicator Badge - controlled by settings */}
         {showModeIndicator && (
           <span className={`px-2 py-1 text-xs font-medium rounded-full backdrop-blur-md transition-all duration-300 ${effectiveUseProxy
             ? 'bg-orange-500/80 text-white'
@@ -207,15 +203,13 @@ export function VideoPlayer({
           </span>
         )}
 
-        {/* 下载按钮（由环境变量控制） */}
-        {process.env.NEXT_PUBLIC_ENABLE_DOWNLOAD === 'true' && (
-          <button
-            onClick={handleDownload}
-            className="px-2 py-1 text-xs font-medium rounded-full bg-blue-500/80 text-white backdrop-blur-md hover:bg-blue-600/80 transition-all duration-300"
-          >
-            下载
-          </button>
-        )}
+        {/* 下载按钮 固定显示 */}
+        <button
+          onClick={handleDownload}
+          className="px-2 py-1 text-xs font-medium rounded-full bg-blue-500/80 text-white backdrop-blur-md hover:bg-blue-600/80"
+        >
+          下载
+        </button>
       </div>
 
       {videoError ? (
@@ -247,3 +241,4 @@ export function VideoPlayer({
     </div>
   );
 }
+
